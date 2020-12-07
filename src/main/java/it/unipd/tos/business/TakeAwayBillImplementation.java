@@ -48,6 +48,9 @@ public class TakeAwayBillImplementation implements TakeAwayBill {
         if(totaleGelatiBudini > 50) {
             totale -= totale*0.1;
         }
+        if(totale<10) {
+            totale += 0.5;
+        }
         return totale;
     }
 

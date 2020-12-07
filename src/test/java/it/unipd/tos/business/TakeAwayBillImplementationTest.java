@@ -96,4 +96,10 @@ public class TakeAwayBillImplementationTest {
         }
         test.getOrderPrice(list,user);
     }
+    @Test
+    public void testTotaleMinore10() {
+        list.add(new MenuItem(ItemType.Gelati, "Cioccolato", 2));
+        list.add(new MenuItem(ItemType.Budini, "Biancaneve", 4));
+        assertEquals(6.5, test.getOrderPrice(list, user),0);
+    }
 }
