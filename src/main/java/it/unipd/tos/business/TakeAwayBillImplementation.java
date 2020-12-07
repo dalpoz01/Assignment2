@@ -15,7 +15,7 @@ public class TakeAwayBillImplementation implements TakeAwayBill {
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) throws 
         RestaurantBillException {
         double totale = 0, minimo = 0;
-        int gelati = 0;
+        int gelati = 0, totaleGelatiBudini = 0;
         if(itemsOrdered==null) {
             throw new RestaurantBillException("Ordine non valido");
         }
@@ -33,10 +33,16 @@ public class TakeAwayBillImplementation implements TakeAwayBill {
                 }
                 gelati++;
             }
+            if(itemsOrdered.get(i).getItemType() != ItemType.Bevande){
+                totaleGelatiBudini +=itemsOrdered.get(i).getPrezzo();
+            }
             totale += itemsOrdered.get(i).getPrezzo();
         }
         if(gelati > 5) {
             totale -= minimo/2;
+        }
+        if(totaleGelatiBudini > 50) {
+            totale -= totale*0.1;
         }
         return totale;
     }

@@ -60,4 +60,33 @@ public class TakeAwayBillImplementationTest {
         list.add(new MenuItem(ItemType.Gelati, "Cocco", 7));
         assertEquals(53.5, test.getOrderPrice(list, user),0);
     }
+    @Test
+    public void testSconto10() {
+        list.add(new MenuItem(ItemType.Gelati, "Cioccolato", 23));
+        list.add(new MenuItem(ItemType.Budini, "Biancaneve", 17));
+        list.add(new MenuItem(ItemType.Gelati, "Cocacola", 10));
+        list.add(new MenuItem(ItemType.Budini, "Puffy", 12));
+        list.add(new MenuItem(ItemType.Bevande, "Fanta", 5));
+        list.add(new MenuItem(ItemType.Bevande, "Sprite", 5));
+        list.add(new MenuItem(ItemType.Bevande, "Acqua", 4));
+        list.add(new MenuItem(ItemType.Bevande, "Frizzante", 1));
+        list.add(new MenuItem(ItemType.Budini, "Limone", 10));
+        assertEquals(78.3, test.getOrderPrice(list, user),0);
+
+    }
+    @Test
+    public void testSconto10_50() {
+        list.add(new MenuItem(ItemType.Gelati, "Cioccolato", 3));
+        list.add(new MenuItem(ItemType.Budini, "Biancaneve", 7));
+        list.add(new MenuItem(ItemType.Bevande, "Cocacola", 10));
+        list.add(new MenuItem(ItemType.Gelati, "Puffy", 2));
+        list.add(new MenuItem(ItemType.Gelati, "Latte", 5));
+        list.add(new MenuItem(ItemType.Gelati, "Panna", 5));
+        list.add(new MenuItem(ItemType.Gelati, "Stracciatella", 4));
+        list.add(new MenuItem(ItemType.Gelati, "Pistacchio", 1));
+        list.add(new MenuItem(ItemType.Gelati, "Limone", 10));
+        list.add(new MenuItem(ItemType.Gelati, "Cocco", 7));
+        list.add(new MenuItem(ItemType.Budini, "Noce", 20));
+        assertEquals(66.15, test.getOrderPrice(list, user),0);
+    }
 }
