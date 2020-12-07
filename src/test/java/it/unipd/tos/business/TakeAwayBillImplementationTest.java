@@ -46,4 +46,18 @@ public class TakeAwayBillImplementationTest {
         list=null;
         test.getOrderPrice(list, user);
     }
+    @Test
+    public void testSconto50() {
+        list.add(new MenuItem(ItemType.Gelati, "Cioccolato", 3));
+        list.add(new MenuItem(ItemType.Budini, "Biancaneve", 7));
+        list.add(new MenuItem(ItemType.Bevande, "Cocacola", 10));
+        list.add(new MenuItem(ItemType.Gelati, "Puffy", 2));
+        list.add(new MenuItem(ItemType.Gelati, "Latte", 5));
+        list.add(new MenuItem(ItemType.Gelati, "Panna", 5));
+        list.add(new MenuItem(ItemType.Gelati, "Stracciatella", 4));
+        list.add(new MenuItem(ItemType.Gelati, "Pistacchio", 1));
+        list.add(new MenuItem(ItemType.Gelati, "Limone", 10));
+        list.add(new MenuItem(ItemType.Gelati, "Cocco", 7));
+        assertEquals(53.5, test.getOrderPrice(list, user),0);
+    }
 }
