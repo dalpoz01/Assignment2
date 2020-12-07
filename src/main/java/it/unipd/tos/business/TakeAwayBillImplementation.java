@@ -13,7 +13,17 @@ public class TakeAwayBillImplementation implements TakeAwayBill {
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) throws 
         RestaurantBillException {
-        return 0;
+        double totale = 0;
+        if(itemsOrdered==null) {
+            throw new RestaurantBillException("Ordine non valido");
+        }
+        if(itemsOrdered.isEmpty()) {
+            throw new RestaurantBillException("Nessun elemento inserito");
+        }
+        for(int i = 0; i < itemsOrdered.size(); i++) {
+            totale += itemsOrdered.get(i).getPrezzo();
+        }
+        return totale;
     }
 
 }
