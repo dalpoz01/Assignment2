@@ -89,4 +89,11 @@ public class TakeAwayBillImplementationTest {
         list.add(new MenuItem(ItemType.Budini, "Noce", 20));
         assertEquals(66.15, test.getOrderPrice(list, user),0);
     }
+    @Test(expected = RestaurantBillException.class)
+    public void testOrdineMaggiore30() throws RestaurantBillException{
+        for(int i = 0; i<40; i++) {
+            list.add(new MenuItem(ItemType.Bevande, "Spritz", 5));
+        }
+        test.getOrderPrice(list,user);
+    }
 }

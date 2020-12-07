@@ -22,6 +22,10 @@ public class TakeAwayBillImplementation implements TakeAwayBill {
         if(itemsOrdered.isEmpty()) {
             throw new RestaurantBillException("Nessun elemento inserito");
         }
+        if(itemsOrdered.size()>30) {
+            throw new RestaurantBillException(
+                    "Numero di elementi troppo elevato");
+        }
         for(int i = 0; i < itemsOrdered.size(); i++) {
             if(itemsOrdered.get(i).getItemType().equals(ItemType.Gelati)) {
                 if(gelati == 0) {
