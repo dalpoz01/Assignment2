@@ -6,6 +6,7 @@ package it.unipd.tos.business;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,17 +16,20 @@ import org.junit.Test;
 import it.unipd.tos.business.exception.RestaurantBillException;
 import it.unipd.tos.model.ItemType;
 import it.unipd.tos.model.MenuItem;
+import it.unipd.tos.model.Ordine;
 
 public class TakeAwayBillImplementationTest {
     private List<MenuItem> list;
     private TakeAwayBillImplementation test; 
-    private User user; 
+    private User user;
+    private LocalTime ora;
 
     @Before
     public void setup() {
         list = new ArrayList<MenuItem>();
         test = new TakeAwayBillImplementation();
         user = new User("Giacomo","Mazzo", 11123, LocalDate.of(2000, 1, 1));
+        ora = LocalTime.of(18,10,00,00);
     }
 
     @Test
@@ -101,5 +105,45 @@ public class TakeAwayBillImplementationTest {
         list.add(new MenuItem(ItemType.Gelati, "Cioccolato", 2));
         list.add(new MenuItem(ItemType.Budini, "Biancaneve", 4));
         assertEquals(6.5, test.getOrderPrice(list, user),0);
+    }
+    @Test
+    public void testOrdiniRegalatiMinorenni() {
+        List<Ordine> ordini = new ArrayList<Ordine>();
+        list.add(new MenuItem( ItemType.Budini, "Pinguino",6));
+        list.add(new MenuItem( ItemType.Bevande, "Spritz",2));
+        String[] nomi =new String[]{"Luca", "Marco", "Matteo", "Giovanni",
+                        "Valerio", "Giacinta", "Alessandra", "Luisa", "Elisabetta",
+                        "Paolo", "Thomas", "Riccardo"};
+        String cognome = "Pozzebon";
+        int id = 12345;
+        user = null;
+        for(int i = 0; i < nomi.length; i++) {
+            user = new User(nomi[i],cognome,id+i,LocalDate.of(2012, 3, 20));;
+            ordini.add(new Ordine(list, user,  ora, test.getOrderPrice(list, user)));
+        }
+
+        List<Ordine> ordiniGratis = test.getFreeOrders(ordini);
+        int ordiniRegalati = 0;
+        for(Ordine ordine : ordiniGratis) {
+            if(ordine.getPrezzo() == 0) {
+                ordiniRegalati++;
+            }
+        }
+        assertEquals(10,ordiniRegalati); 
+    }
+
+    @Test(expected=RestaurantBillException.class)
+    public void testOrdiniRegalatiMinorenniMenoDi10() { 
+        List<Ordine> ordini = new ArrayList<Ordine>();
+        list.add(new MenuItem( ItemType.Bevande, "Spritz",3));
+        String[] nomi =new String[]{"Luca", "Marco", "Giovanni", "Sara", "Micol"};
+        String cognome = "Pozzebon";
+        user = null;
+        int id = 12345;
+        for (int i = 0; i < nomi.length; i++) {
+            user = new User(nomi[i],cognome,id+i,LocalDate.of(2013, 1, 13));;
+            ordini.add(new Ordine(list, user,  ora, test.getOrderPrice(list, user)));
+        }
+        test.getFreeOrders(ordini);
     }
 }

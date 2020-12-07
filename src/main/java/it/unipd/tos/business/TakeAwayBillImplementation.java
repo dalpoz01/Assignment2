@@ -3,11 +3,14 @@
 ////////////////////////////////////////////////////////////////////
 package it.unipd.tos.business;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.unipd.tos.business.exception.RestaurantBillException;
 import it.unipd.tos.model.ItemType;
 import it.unipd.tos.model.MenuItem;
+import it.unipd.tos.model.Ordine;
 
 public class TakeAwayBillImplementation implements TakeAwayBill {
 
@@ -52,6 +55,32 @@ public class TakeAwayBillImplementation implements TakeAwayBill {
             totale += 0.5;
         }
         return totale;
+    }
+    
+    public List<Ordine> getFreeOrders(List<Ordine> ordini) throws 
+    RestaurantBillException {
+        List<Ordine> ordiniGratis = new ArrayList<Ordine>();
+        for (int i = 0; i < ordini.size(); i++) {
+            if(ordini.get(i).getUser().getEta()<18 &&
+        ordini.get(i).getOrarioOrdine().isAfter(LocalTime.of(18,00,00,00)) && 
+        ordini.get(i).getOrarioOrdine().isBefore(LocalTime.of(19,00,00,00))) { 
+                ordiniGratis.add(ordini.get(i));
+            }
+        }
+        if(ordiniGratis.size() > 9){
+            for(int i=0; i<10; i++) {
+              int indiceRandom = (int)(ordiniGratis.size() * Math.random());
+              if(ordiniGratis.get(indiceRandom).getPrezzo() == 0) {
+                  i--;
+              }else {
+                  ordiniGratis.get(indiceRandom).setPrezzo(0);
+              }
+            }
+        }else {
+            throw new RestaurantBillException(
+                    "Ordini non sufficienti per riceverne gratis");
+        }
+        return ordiniGratis;
     }
 
 }
